@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DaftarBankController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\NotActiveAccountController;
 use App\Http\Controllers\PenyediaLapanganController;
 use App\Http\Controllers\RekeningController;
@@ -52,10 +55,45 @@ Route::middleware(['cekstatus', 'cekrole:penyedia'])->group(function () {
 });
 
 Route::middleware(CekRole::class . ':admin')->group(function(){
-
+    Route::get('/dashboard/superadmin', ([DashboardController::class,'superadminDashboard']))
+    ->name('adminDashboardPage');
 });
 
 Route::middleware(CekRole::class . ':superadmin')->group(function(){
     Route::get('/dashboard/superadmin', ([DashboardController::class,'superadminDashboard']))
     ->name('superadminDashboardPage');
+
+    Route::post('/dashboard/superadmin/tambah-admin', ([AdminController::class,'tambahAdmin']))
+    ->name('tambahAdmin');
+
+    Route::put('/dashboard/superadmin/{id_user}/edit-admin', ([AdminController::class,'editAdmin']))
+    ->name('editAdmin');
+
+    Route::delete('/dashboard/superadmin/{id_user}/hapus-admin', ([AdminController::class,'hapusAdmin']))
+    ->name('hapusAdmin');
+
+    Route::get('/daftar-bank', ([DaftarBankController::class,'showDaftarBank']))
+    ->name('daftarBank');
+
+    Route::post('/daftar-bank', ([DaftarBankController::class,'tambahDaftarBank']))
+    ->name('tambahDaftarBank');
+
+    Route::put('/daftar-bank/{kode_bank}/edit', ([DaftarBankController::class,'editDaftarBank']))
+    ->name('editDaftarBank');
+
+    Route::delete('/daftar-bank/{kode_bank}/hapus', ([DaftarBankController::class,'hapusDaftarBank']))
+    ->name('hapusDaftarBank');
+
+    Route::get('/jenis-lapangan', ([JenisLapanganController::class,'showJenisLapangan']))
+    ->name('jenisLapangan');
+
+    Route::post('/jenis-lapangan', ([JenisLapanganController::class,'tambahJenisLapangan']))
+    ->name('tambahJenisLapangan');
+
+    Route::put('/jenis-lapangan', ([JenisLapanganController::class,'editJenisLapangan']))
+    ->name('editJenisLapangan');
+
+    Route::delete('/jenis-lapangan', ([JenisLapanganController::class,'hapusJenisLapangan']))
+    ->name('hapusJenisLapangan');
+
 });

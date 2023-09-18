@@ -34,7 +34,7 @@ class User extends Authenticatable
         return $this->hasOne(admin::class,'id_user');
     }
 
-    public function penyedia_lapangan(){
+    public function penyedia(){
         return $this->hasOne(penyedia_lapangan::class,'id_user');
     }
 

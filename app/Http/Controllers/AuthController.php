@@ -30,7 +30,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             if ($user->role === 'penyedia'){
                 return redirect()->route('dashboardPage')->with([
-                    'notifikasi' => 'Selamat Datang ' . $user->penyedia_lapangan->nama_bisnis,
+                    'notifikasi' => 'Selamat Datang ' . $user->penyedia->nama_bisnis,
                     'type' => 'success'
                 ]);
             }elseif($user->role === 'admin'){

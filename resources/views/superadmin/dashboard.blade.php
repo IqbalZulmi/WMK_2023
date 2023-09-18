@@ -119,10 +119,10 @@
                                                     </td>
                                                     <td>
                                                         <div class="d-flex flex-wrap gap-1 justify-content-center">
-                                                            <button class="btn btn-main">
+                                                            <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#editModal{{ $index+1 }}">
                                                                 <i class="bi bi-pen"></i> Edit
                                                             </button>
-                                                            <button class="btn btn-danger">
+                                                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal{{ $index+1 }}">
                                                                 <i class="bi bi-trash3"></i> Hapus
                                                             </button>
                                                         </div>
@@ -146,21 +146,156 @@
 
     <div class="modal fade" id="TambahModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Understood</button>
-            </div>
-          </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Tambah Admin</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('tambahAdmin') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="container-fluid">
+                            <div class="row gy-2">
+                                <div class="col-md-6">
+                                    <label for="">Email</label>
+                                    <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="">Password</label>
+                                    <input name="password" type="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}" required>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="">Nama</label>
+                                    <input name="nama" type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" required>
+                                    @error('nama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="">Nomor Handphone</label>
+                                    <input name="no_hp" type="text" class="form-control @error('no_hp') is-invalid @enderror" value="{{ old('no_hp') }}" required>
+                                    @error('no_hp')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-12">
+                                    <label for="">Foto</label>
+                                    <input name="foto" type="file" class="form-control @error('foto') is-invalid @enderror">
+                                    @error('foto')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-main">Simpan</button>
+                    </form>
+                </div>
+        </div>
         </div>
     </div>
+    @foreach ($dataAdmin as $index => $data )
+        <div class="modal fade" id="editModal{{ $index+1 }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Edit Admin</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('editAdmin',['id_user' => $data->id_user]) }}" method="POST" enctype="multipart/form-data">
+                            @csrf @method('put')
+                            <div class="container-fluid">
+                                <div class="row gy-2">
+                                    <input type="hidden" name="old_email" value="{{ $data->user->email }}">
+                                    <div class="col-md-6">
+                                        <label for="">Email</label>
+                                        <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email',$data->user->email) }}" required>
+                                        @error('email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Password</label>
+                                        <input name="password" type="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}">
+                                        @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Nama</label>
+                                        <input name="nama" type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama',$data->nama) }}" required>
+                                        @error('nama')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Nomor Handphone</label>
+                                        <input name="no_hp" type="text" class="form-control @error('no_hp') is-invalid @enderror" value="{{ old('no_hp',$data->no_hp) }}" required>
+                                        @error('no_hp')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="">Foto</label>
+                                        <select name="status" class="form-select @error('status') is-invalid @enderror" required>
+                                            <option value="aktif" {{ $data->user->status == 'aktif' ? 'selected' : '' }}>aktif</option>
+                                            <option value="belum aktif" {{ $data->user->status == 'belum aktif' ? 'selected' : '' }}>belum aktif</option>
+                                        </select>
+                                        @error('foto')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="">Foto</label>
+                                        <input name="foto" type="file" class="form-control @error('foto') is-invalid @enderror">
+                                        @error('foto')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-main">Simpan</button>
+                        </form>
+                    </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="hapusModal{{ $index+1 }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Hapus Admin</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="text-capitalize">
+                            Apakah anda yakin ingin menghapus akun <span class="fw-bold text-danger">{{ $data->user->email }} ?</span>
+                        </h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form action="{{ route('hapusAdmin',['id_user' => $data->id_user]) }}" method="POST">
+                            @csrf @method('delete')
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
+                    </div>
+            </div>
+            </div>
+        </div>
+    @endforeach
 
     @include('components.footer')
 @endsection
