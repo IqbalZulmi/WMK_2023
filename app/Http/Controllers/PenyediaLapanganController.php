@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class PenyediaLapanganController extends Controller
 {
     public function showProfile(){
-        $auth = Auth::user()->penyedia;
+        $auth = Auth::user();
 
-        $dataProfile = penyedia_lapangan::where('id',$auth->id)->firstOrFail();
+        $dataProfile = penyedia_lapangan::where('id_user',$auth->id)->firstOrFail();
         $daftarBank = daftar_bank::all();
         return view('penyedia_lapangan.profile-penyedia',[
             'dataProfile' => $dataProfile,

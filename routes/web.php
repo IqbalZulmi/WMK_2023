@@ -6,6 +6,7 @@ use App\Http\Controllers\DaftarBankController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\NotActiveAccountController;
+use App\Http\Controllers\PenarikanController;
 use App\Http\Controllers\PenyediaLapanganController;
 use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\UserController;
@@ -44,8 +45,11 @@ Route::middleware('auth')->group(function(){
 });
 
 Route::middleware(['cekstatus', 'cekrole:penyedia'])->group(function () {
-    Route::get('/profile/penyedia', ([PenyediaLapanganController::class,'showProfile']))
+    Route::get('/dashboard/penyedia', ([DashboardController::class,'penyediaDashboard']))
     ->name('dashboardPage');
+
+    Route::get('/profile/penyedia', ([PenyediaLapanganController::class,'showProfile']))
+    ->name('profilePenyedia');
 
     Route::put('/profile/penyedia/{id_user}/update-profile', ([PenyediaLapanganController::class,'updateProfile']))
     ->name('updateProfilePenyedia');
@@ -55,8 +59,20 @@ Route::middleware(['cekstatus', 'cekrole:penyedia'])->group(function () {
 });
 
 Route::middleware(CekRole::class . ':admin')->group(function(){
-    Route::get('/dashboard/superadmin', ([DashboardController::class,'superadminDashboard']))
+    Route::get('/dashboard/admin', ([DashboardController::class,'adminDashboard']))
     ->name('adminDashboardPage');
+
+    Route::put('/dashboard/admin/{id_user}/edit-status', ([UserController::class,'updateStatus']))
+    ->name('editStatusPenyedia');
+
+    Route::get('/profile/admin', ([AdminController::class,'showProfile']))
+    ->name('profileAdmin');
+
+    Route::put('/profile/admin/{id_user}/edit', ([AdminController::class,'updateProfile']))
+    ->name('updateProfileAdmin');
+
+    Route::get('/penarikan', ([PenarikanController::class,'showValidasiPenarikan']))
+    ->name('penarikanPage');
 });
 
 Route::middleware(CekRole::class . ':superadmin')->group(function(){
@@ -75,7 +91,7 @@ Route::middleware(CekRole::class . ':superadmin')->group(function(){
     Route::get('/daftar-bank', ([DaftarBankController::class,'showDaftarBank']))
     ->name('daftarBank');
 
-    Route::post('/daftar-bank', ([DaftarBankController::class,'tambahDaftarBank']))
+    Route::post('/daftar-bank/tambah', ([DaftarBankController::class,'tambahDaftarBank']))
     ->name('tambahDaftarBank');
 
     Route::put('/daftar-bank/{kode_bank}/edit', ([DaftarBankController::class,'editDaftarBank']))
@@ -87,13 +103,13 @@ Route::middleware(CekRole::class . ':superadmin')->group(function(){
     Route::get('/jenis-lapangan', ([JenisLapanganController::class,'showJenisLapangan']))
     ->name('jenisLapangan');
 
-    Route::post('/jenis-lapangan', ([JenisLapanganController::class,'tambahJenisLapangan']))
+    Route::post('/jenis-lapangan/tambah', ([JenisLapanganController::class,'tambahJenisLapangan']))
     ->name('tambahJenisLapangan');
 
-    Route::put('/jenis-lapangan', ([JenisLapanganController::class,'editJenisLapangan']))
+    Route::put('/jenis-lapangan/{id_jenis_lapangan}/edit', ([JenisLapanganController::class,'editJenisLapangan']))
     ->name('editJenisLapangan');
 
-    Route::delete('/jenis-lapangan', ([JenisLapanganController::class,'hapusJenisLapangan']))
+    Route::delete('/jenis-lapangan/{id_jenis_lapangan}/hapus', ([JenisLapanganController::class,'hapusJenisLapangan']))
     ->name('hapusJenisLapangan');
 
 });

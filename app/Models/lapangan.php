@@ -18,7 +18,7 @@ class lapangan extends Model
         'foto_lapangan',
     ];
 
-    public function penyedia_lapangan(){
+    public function penyedia(){
         return $this->belongsTo(penyedia_lapangan::class,'id_penyedia_lapangan');
     }
 

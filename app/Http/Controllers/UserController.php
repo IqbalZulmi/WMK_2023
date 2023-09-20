@@ -40,4 +40,33 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function updateStatus(Request $request,$id_user){
+        $validatedData = $request->validate([
+            'status' => 'required',
+        ], [
+            'status.required' => 'Status harus diisi.',
+        ]);
+
+        $user = User::where('id',$id_user)->firstOrFail();
+        $user->status = $request->status;
+        if($user->isDirty()){
+            if ($user->save()) {
+                return redirect()->back()->with([
+                    'notifikasi' => 'status berhasil diperbarui!',
+                    'type' => 'success'
+                ]);
+            } else {
+                return redirect()->back()->with([
+                    'notifikasi' => 'status gagal diperbarui!',
+                    'type' => 'error'
+                ]);
+            }
+        }else{
+            return redirect()->back()->with([
+                'notifikasi' => 'Tidak ada perubahan!',
+                'type' => 'info'
+            ]);
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\admin;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -92,6 +93,7 @@ class AdminController extends Controller
             'email.email' => 'Email tidak valid.',
             'email.email:dns' => 'Email tidak valid.',
             'password.min' => 'Password minimal harus 8 karakter.',
+            'status.required' => 'status wajib diisi.',
             'nama.required' => 'Nama wajib diisi.',
             'no_hp.required' => 'Nomor HP wajib diisi.',
             'no_hp.numeric' => 'Nomor HP harus berupa angka.',
@@ -172,6 +174,84 @@ class AdminController extends Controller
             return redirect()->back()->with([
                 'notifikasi'=>"Gagal menghapus data!",
                 "type"=>"error",
+            ]);
+        }
+    }
+
+    public function showProfile(){
+        $auth = Auth::user();
+
+        $admin = admin::where('id_user',$auth->id)->firstOrFail();
+        return view('admin.profile-admin',[
+            'dataProfile' => $admin,
+        ]);
+    }
+
+    public function updateProfile(Request $request,$id_user){
+        $validatedData = $request->validate([
+            'email' => 'required|unique:users,email,'. $request->old_email . ',email|email:dns',
+            'nama' => 'required',
+            'no_hp' => 'required|numeric',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.unique' => 'Email sudah digunakan.',
+            'email.email' => 'Email tidak valid.',
+            'email.email:dns' => 'Email tidak valid.',
+            'nama.required' => 'Nama wajib diisi.',
+            'no_hp.required' => 'Nomor HP wajib diisi.',
+            'no_hp.numeric' => 'Nomor HP harus berupa angka.',
+            'foto.image' => 'Berkas foto harus berupa gambar.',
+            'foto.mimes' => 'Format gambar yang diizinkan: jpeg, png, jpg.',
+            'foto.max' => 'Ukuran gambar maksimum adalah 2 MB.',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $akun = User::where('id',$id_user)->firstOrFail();
+            $akun->email = $request->email;
+
+            $admin = admin::where('id_user',$id_user)->firstOrFail();
+            $admin->nama = $request->nama;
+            $admin->no_hp = $request->no_hp;
+
+            if ($request->hasFile('foto')) {
+                $old_foto = $admin->foto;
+                if (!empty($old_foto) && is_file('storage/'.$old_foto)) {
+                    unlink('storage/'.$old_foto);
+                }
+
+                $foto = $request->file('foto')->store('public/profile_img');
+                $foto = basename($foto);
+                $admin->foto = $foto ? 'profile_img/' . $foto : null;
+            }else{
+                $foto = $admin->foto;
+            }
+
+            if($akun->isDirty() || $admin->isDirty()){
+                $akun->save();
+                $admin->save();
+                DB::commit();
+
+                return redirect()->back()->with([
+                    'notifikasi' => 'Berhasil mengubah profile',
+                    'type' => 'success',
+                ]);
+            }else{
+                return redirect()->back()->with([
+                    'notifikasi' => 'tidak ada perubahan',
+                    'type' => 'info',
+                ]);
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->back()->with([
+                'notifikasi' => 'Gagal mengubah profile' ,
+                'type' => 'error',
             ]);
         }
     }

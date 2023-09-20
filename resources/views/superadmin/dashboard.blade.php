@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end mt-1">
-                                        <a href="" class="btn btn-main">Kelola Daftar Bank <i class="bi bi-pencil-square"></i></a>
+                                        <a href="{{ route('daftarBank') }}" class="btn btn-main">Kelola Daftar Bank <i class="bi bi-pencil-square"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end mt-1">
-                                        <a href="" class="btn btn-main">Kelola Jenis Lapangan <i class="bi bi-pencil-square"></i></a>
+                                        <a href="{{ route('jenisLapangan') }}" class="btn btn-main">Kelola Jenis Lapangan <i class="bi bi-pencil-square"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +250,7 @@
                                             <option value="aktif" {{ $data->user->status == 'aktif' ? 'selected' : '' }}>aktif</option>
                                             <option value="belum aktif" {{ $data->user->status == 'belum aktif' ? 'selected' : '' }}>belum aktif</option>
                                         </select>
-                                        @error('foto')
+                                        @error('status')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>

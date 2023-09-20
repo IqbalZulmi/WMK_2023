@@ -19,12 +19,12 @@
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Daftar Bank</h1>
+            <h1>Jenis Lapangan</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('superadminDashboardPage') }}">Home</a></li>
                     <li class="breadcrumb-item">Kelola</li>
-                    <li class="breadcrumb-item active">Daftar Bank</li>
+                    <li class="breadcrumb-item active">Jenis Lapangan</li>
                     </ol>
             </nav>
         </div>
@@ -34,29 +34,27 @@
                 <div class="col-lg-12">
                     <div class="card overflow-auto">
                         <div class="card-body">
-                            <h5 class="card-title">Kelola Daftar Bank</h5>
+                            <h5 class="card-title">Kelola Jenis Lapangan</h5>
                             <div class="d-flex justify-content-end mb-2">
                                 <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#TambahModal">
-                                    <i class="bi bi-plus-circle-fill"></i> Tambah Admin
+                                    <i class="bi bi-plus-circle-fill"></i> Tambah Jenis Lapangan
                                 </button>
                             </div>
                             <table class="table table-striped table-hover border table-bordered align-middle">
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
-                                        <th scope="col">Kode Bank</th>
-                                        <th scope="col">Nama Bank</th>
+                                        <th scope="col">Jenis Lapangan</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($dataBank as $index => $data )
+                                    @forelse ($dataJenisLapangan as $index => $data )
                                         <tr>
                                             <th>{{ $index+1 }}</th>
-                                            <td>{{ $data->kode_bank }}</td>
-                                            <td>{{ $data->nama_bank }}</td>
+                                            <td>{{ $data->jenis_lapangan }}</td>
                                             <td>
-                                                <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                                <div class="d-flex flex-wrap gap-1 justify-content-start">
                                                     <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#editModal{{ $index+1 }}">
                                                         <i class="bi bi-pen"></i> Edit
                                                     </button>
@@ -68,7 +66,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="100%">Tidak Ada Data Untuk Ditampilkan!</td>
+                                            <td colspan="100%" class="text-center">Tidak Ada Data Untuk Ditampilkan!</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -88,21 +86,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('tambahDaftarBank') }}" method="POST">
+                    <form action="{{ route('tambahJenisLapangan') }}" method="POST">
                         @csrf
                         <div class="container-fluid">
                             <div class="row gy-2">
                                 <div class="col-12">
-                                    <label for="" class="mb-2">Kode Bank</label>
-                                    <input name="kode_bank" type="text" class="form-control @error('kode_bank') is-invalid @enderror" value="{{ old('kode_bank') }}" required>
-                                    @error('kode_bank')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-12">
-                                    <label for="" class="mb-2">Nama Bank</label>
-                                    <input name="nama_bank" type="text" class="form-control @error('nama_bank') is-invalid @enderror" value="{{ old('nama_bank') }}" required>
-                                    @error('nama_bank')
+                                    <label for="" class="mb-2">Jenis Lapangan</label>
+                                    <input name="jenis_lapangan" type="text" class="form-control @error('jenis_lapangan') is-invalid @enderror" value="{{ old('jenis_lapangan') }}" required>
+                                    @error('jenis_lapangan')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -117,31 +108,23 @@
         </div>
         </div>
     </div>
-    @foreach ($dataBank as $index => $data )
+    @foreach ($dataJenisLapangan as $index => $data )
         <div class="modal fade" id="editModal{{ $index+1 }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5">Edit Daftar Bank</h1>
+                        <h1 class="modal-title fs-5">Edit Jenis Lapangan</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('editDaftarBank',['kode_bank' => $data->kode_bank]) }}" method="POST">
+                        <form action="{{ route('editJenisLapangan',['id_jenis_lapangan' => $data->id]) }}" method="POST">
                             @csrf @method('put')
                             <div class="container-fluid">
                                 <div class="row gy-2">
-                                    <input type="hidden" name="old_kode_bank" value="{{ $data->kode_bank }}">
                                     <div class="col-12">
-                                        <label for="" class="mb-2">Kode Bank</label>
-                                        <input name="kode_bank" type="text" class="form-control @error('kode_bank') is-invalid @enderror" value="{{ old('kode_bank', $data->kode_bank) }}" required>
-                                        @error('kode_bank')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="" class="mb-2">Nama Bank</label>
-                                        <input name="nama_bank" type="text" class="form-control @error('nama_bank') is-invalid @enderror" value="{{ old('nama_bank', $data->nama_bank) }}" required>
-                                        @error('nama_bank')
+                                        <label for="" class="mb-2">Jenis Lapangan</label>
+                                        <input name="jenis_lapangan" type="text" class="form-control @error('jenis_lapangan') is-invalid @enderror" value="{{ old('jenis_lapangan', $data->jenis_lapangan) }}" required>
+                                        @error('jenis_lapangan')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -161,17 +144,17 @@
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5">Hapus Daftar Bank</h1>
+                        <h1 class="modal-title fs-5">Hapus Jenis Lapangan</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <h4 class="text-capitalize">
-                            Apakah anda yakin ingin menghapus bank <span class="fw-bold text-danger">{{ $data->nama_bank }} ?</span>
+                            Apakah anda yakin ingin menghapus jenis lapangan <span class="fw-bold text-danger">{{ $data->jenis_lapangan }} ?</span>
                         </h4>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <form action="{{ route('hapusDaftarBank',['kode_bank' => $data->kode_bank]) }}" method="POST">
+                        <form action="{{ route('hapusJenisLapangan',['id_jenis_lapangan' => $data->id]) }}" method="POST">
                             @csrf @method('delete')
                             <button type="submit" class="btn btn-danger">Hapus</button>
                         </form>
