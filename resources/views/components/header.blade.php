@@ -29,6 +29,8 @@ $userPhoto = $user->$userRole->foto ?? null;
                         <h6>
                             @if ($userRole == 'superadmin')
                                 {{ $user->email }}
+                            @elseif ($userRole == 'penyedia')
+                                {{ $user->$userRole->nama_bisnis }}
                             @else
                                 {{ $user->$userRole->nama }}
                             @endif

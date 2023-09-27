@@ -13,7 +13,6 @@ class penyedia_lapangan extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'id_user',
-        'id_rekening',
         'nama_bisnis',
         'alamat',
         'deskripsi_lapangan',

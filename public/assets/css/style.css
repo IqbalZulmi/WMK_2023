@@ -920,3 +920,87 @@ div.dt-buttons.btn-group.flex-wrap button{
     background-color: var(--second-color);
     border: var(--second-color);
 }
+
+/*--------------------------------------------------------------
+# Login
+--------------------------------------------------------------*/
+.col-lg-6.main-color{
+    background-color: var(--third-color);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.carousel {
+    animation: fadeIn 2s;
+}
+
+.carousel-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.carousel-item {
+    height: auto !important;
+    align-self: center;
+}
+
+.carousel img {
+    max-height: 630px;
+    width: 300px;
+    display: block;
+    margin: 0;
+}
+
+.anchor:hover{
+    color: black;
+}
+
+.spasi-atas {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  /* Menyelaraskan konten secara horizontal di tengah */
+    height: 100%;  /* Anda mungkin perlu menyesuaikan ini sesuai kebutuhan */
+    text-align: center;
+}
+
+/*--------------------------------------------------------------
+# Register
+--------------------------------------------------------------*/
+.step {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    cursor: pointer;
+}
+
+.step.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Menyembunyikan semua bagian dari formulir */
+.form-section {
+    display: none;
+}
+
+/* Menampilkan bagian pertama dari formulir sebagai default */
+.form-section.current {
+    display: block;
+}
+
+/*--------------------------------------------------------------
+# Lapangan & jadwal
+--------------------------------------------------------------*/
+.card .card-img-top.lapangan-img{
+    max-height: 250px;
+}

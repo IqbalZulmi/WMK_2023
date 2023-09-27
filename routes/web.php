@@ -5,9 +5,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DaftarBankController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisLapanganController;
+use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\NotActiveAccountController;
 use App\Http\Controllers\PenarikanController;
 use App\Http\Controllers\PenyediaLapanganController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CekRole;
@@ -30,6 +32,12 @@ Route::middleware('guest')->group(function(){
 
     Route::post('/proses-login', ([AuthController::class, 'loginProcess']))
     ->name('loginProcess');
+
+    Route::get('/register', ([RegisterController::class,'showRegisterPage']))
+    ->name('registerPage');
+
+    Route::post('/register/penyedia', ([RegisterController::class,'registerPenyedia']))
+    ->name('registerPenyedia');
 });
 
 Route::middleware('auth')->group(function(){
@@ -47,6 +55,18 @@ Route::middleware('auth')->group(function(){
 Route::middleware(['cekstatus', 'cekrole:penyedia'])->group(function () {
     Route::get('/dashboard/penyedia', ([DashboardController::class,'penyediaDashboard']))
     ->name('dashboardPage');
+
+    Route::get('/penarikan', ([PenarikanController::class,'showPenarikanPage']))
+    ->name('penarikanPage');
+
+    Route::post('/penarikan/ajukan', ([PenarikanController::class,'pengajuanPenarikan']))
+    ->name('pengajuanPenarikan');
+
+    Route::get('/lapangan', ([LapanganController::class,'showLapanganPage']))
+    ->name('lapanganPage');
+
+    Route::post('/lapangan/tambah', ([LapanganController::class,'tambahLapangan']))
+    ->name('tambahLapangan');
 
     Route::get('/profile/penyedia', ([PenyediaLapanganController::class,'showProfile']))
     ->name('profilePenyedia');
@@ -71,8 +91,8 @@ Route::middleware(CekRole::class . ':admin')->group(function(){
     Route::put('/profile/admin/{id_user}/edit', ([AdminController::class,'updateProfile']))
     ->name('updateProfileAdmin');
 
-    Route::get('/penarikan', ([PenarikanController::class,'showValidasiPenarikan']))
-    ->name('penarikanPage');
+    Route::get('/validasi/penarikan', ([PenarikanController::class,'showValidasiPenarikan']))
+    ->name('validasiPenarikanPage');
 });
 
 Route::middleware(CekRole::class . ':superadmin')->group(function(){

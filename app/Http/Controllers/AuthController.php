@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
+use App\Helper\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
@@ -60,5 +61,14 @@ class AuthController extends Controller
             'notifikasi' => 'Anda berhasil logout !',
             'type' => 'success'
         ]);
+    }
+
+    public function registerMobile(Request $request) {
+        $response = (new UserService($request->email, $request->password))->register($request->devicename);
+        return response()->json($response);
+    }
+
+    public function loginMobile(Request $request) {
+
     }
 }

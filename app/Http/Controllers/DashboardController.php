@@ -45,8 +45,12 @@ class DashboardController extends Controller
         $penarikan = Penarikan::where('id_penyedia_lapangan', $user->id)->get();
         $lapangan = lapangan::where('id_penyedia_lapangan', $user->id)->get();
 
-        $jumlahPenarikan = $penarikan->sum('jumlah_penarikan');
+        $jumlahPenarikan = $penarikan->where('status','selesai')->sum('jumlah_penarikan');
         $jumlahPemesanan = $lapangan->sum(function ($lap) {
+            return $lap->pemesanan->where('status', 'berhasil')->sum('total_harga');
+        });
+
+        $jumlahPemesananGagal = $lapangan->sum(function ($lap) {
             return $lap->pemesanan->where('status', 'berhasil')->sum('total_harga');
         });
 
@@ -56,6 +60,8 @@ class DashboardController extends Controller
             'totalSaldo' => $totalSaldo,
             'dataLapangan' => $lapangan,
             'dataPenarikan' => $penarikan,
+            'pemesananGagal' => $jumlahPemesananGagal,
+            'pemesananBerhasil' => $jumlahPemesanan
         ]);
     }
 
