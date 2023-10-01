@@ -22,6 +22,7 @@
     <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-html5-2.4.1/b-print-2.4.1/r-2.5.0/datatables.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
     <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
@@ -53,6 +54,7 @@
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.6/b-2.4.1/b-html5-2.4.1/b-print-2.4.1/r-2.5.0/datatables.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
     @if (session('notifikasi'))
     <script>
         Swal.fire({
@@ -70,6 +72,23 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script>
+        window.addEventListener('beforeunload', function (e) {
+            // Lakukan logout melalui AJAX atau fetch ke URL logout di sini
+            // Pastikan untuk mengirimkan permintaan logout ke sisi server (Laravel).
+            // Anda dapat menggunakan fetch atau jQuery AJAX untuk ini.
+            // Contohnya (menggunakan fetch):
+            fetch('/logout', {
+                method: 'GET', // Sesuaikan dengan metode logout Anda
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Token CSRF dari Laravel
+                },
+                credentials: 'same-origin', // Menggunakan kredensial yang sama
+            });
+        });
+    </script>
+
+
     @stack('js')
 
 </body>

@@ -4,13 +4,16 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DaftarBankController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\NotActiveAccountController;
+use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PenarikanController;
 use App\Http\Controllers\PenyediaLapanganController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RekeningController;
+use App\Http\Controllers\SuperadminController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CekRole;
 use Illuminate\Support\Facades\Route;
@@ -62,11 +65,29 @@ Route::middleware(['cekstatus', 'cekrole:penyedia'])->group(function () {
     Route::post('/penarikan/ajukan', ([PenarikanController::class,'pengajuanPenarikan']))
     ->name('pengajuanPenarikan');
 
+    Route::get('/riwayat/penarikan', ([PenarikanController::class,'showRiwayatPenarikanPage']))
+    ->name('riwayatPenarikanPage');
+
+    Route::get('/riwayat/pemesanan', ([PemesananController::class,'showRiwayatPemesananPage']))
+    ->name('riwayatPemesananPage');
+
     Route::get('/lapangan', ([LapanganController::class,'showLapanganPage']))
     ->name('lapanganPage');
 
     Route::post('/lapangan/tambah', ([LapanganController::class,'tambahLapangan']))
     ->name('tambahLapangan');
+
+    Route::put('/lapangan/{id_lapangan}/edit', ([LapanganController::class,'editLapangan']))
+    ->name('editLapangan');
+
+    Route::delete('/lapangan/{id_lapangan}/hapus', ([LapanganController::class,'hapusLapangan']))
+    ->name('hapusLapangan');
+
+    Route::put('/lapangan/jadwal/{id_jadwal}/edit', ([JadwalController::class,'editJadwalLapangan']))
+    ->name('editJadwalLapangan');
+
+    Route::delete('/lapangan/jadwal/{id_jadwal}/hapus', ([JadwalController::class,'hapusJadwalLapangan']))
+    ->name('hapusJadwalLapangan');
 
     Route::get('/profile/penyedia', ([PenyediaLapanganController::class,'showProfile']))
     ->name('profilePenyedia');
@@ -96,6 +117,9 @@ Route::middleware(CekRole::class . ':admin')->group(function(){
 });
 
 Route::middleware(CekRole::class . ':superadmin')->group(function(){
+    Route::get('/change-password/superadmin', ([SuperadminController::class,'showChangePasswordPage']))
+    ->name('superadminChangePasswordPage');
+
     Route::get('/dashboard/superadmin', ([DashboardController::class,'superadminDashboard']))
     ->name('superadminDashboardPage');
 

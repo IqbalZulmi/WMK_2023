@@ -131,9 +131,7 @@
                                                     </td>
                                                 </tr>
                                             @empty
-                                                <tr>
-                                                    <td colspan="100%" class="text-center">Tidak Ada Data Untuk Ditampilkan!</td>
-                                                </tr>
+                                                
                                             @endforelse
                                         </tbody>
                                     </table>

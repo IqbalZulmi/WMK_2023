@@ -62,6 +62,16 @@ $userPhoto = $user->$userRole->foto ?? null;
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                    @else
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('superadminChangePasswordPage') }}">
+                                <i class="bi bi-gear"></i>
+                                <span>Ubah Kata Sandi</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                     @endif
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_penyedia_lapangan');
             $table->foreign('id_penyedia_lapangan')->references('id')->on('penyedia_lapangans')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('id_admin');
+            $table->unsignedBigInteger('id_admin')->nullable();
             $table->foreign('id_admin')->references('id')->on('admins')->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('jumlah_penarikan');
-            $table->string('bukti_pembayaran');
-            $table->text('komentar');
+            $table->string('bukti_pembayaran')->nullable();
+            $table->text('komentar')->nullable();
             $table->enum('status',['sedang diproses','selesai','ditolak'])->default('sedang diproses');
             $table->timestamps();
         });

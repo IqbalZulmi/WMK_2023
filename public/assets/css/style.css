@@ -921,6 +921,10 @@ div.dt-buttons.btn-group.flex-wrap button{
     border: var(--second-color);
 }
 
+.paginate_button.page-item .page-link{
+    color: var(--second-color);
+}
+
 /*--------------------------------------------------------------
 # Login
 --------------------------------------------------------------*/

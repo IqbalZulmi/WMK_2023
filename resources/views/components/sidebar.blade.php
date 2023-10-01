@@ -80,24 +80,24 @@
             <li class="nav-heading">Kelola</li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('lapanganPage') ? '' : ' collapsed' }}" href="{{ route('lapanganPage') }}">
-                    <i class="bi bi-cart3"></i>
+                    <i class="ri-football-line"></i>
                     <span>Lapangan & Jadwal</span>
                 </a>
             </li>
             <li class="nav-heading">Riwayat</li>
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                <a class="nav-link {{ request()->routeIs('riwayatPenarikanPage') || request()->routeIs('riwayatPemesananPage') ? '' : ' collapsed' }}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-layout-text-window-reverse"></i><span>Riwayat</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <ul id="tables-nav" class="nav-content {{ request()->routeIs('riwayatPenarikanPage') || request()->routeIs('riwayatPemesananPage') ? '' : ' collapse' }} " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="tables-general.html">
+                        <a href="{{ route('riwayatPenarikanPage') }}">
                             <i class="bi bi-cash-coin"></i><span>Penarikan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="tables-data.html">
-                            <i class="bi bi-cart3"></i><span>Pemesanan</span>
+                        <a href="{{ route('riwayatPemesananPage') }}">
+                            <i class="bi bi-calendar"></i><span>Pemesanan</span>
                         </a>
                     </li>
                 </ul>

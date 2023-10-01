@@ -42,26 +42,28 @@ class DashboardController extends Controller
 
     public function penyediaDashboard(){
         $user = Auth::user()->penyedia;
-        $penarikan = Penarikan::where('id_penyedia_lapangan', $user->id)->get();
-        $lapangan = lapangan::where('id_penyedia_lapangan', $user->id)->get();
 
-        $jumlahPenarikan = $penarikan->where('status','selesai')->sum('jumlah_penarikan');
-        $jumlahPemesanan = $lapangan->sum(function ($lap) {
-            return $lap->pemesanan->where('status', 'berhasil')->sum('total_harga');
+        // Menggunakan eager loading untuk mengambil data penarikan dan lapangan
+        $user->load(['penarikan', 'lapangan.pemesanan']);
+
+        $jumlahPenarikan = $user->penarikan->where('status', 'selesai')->sum('jumlah_penarikan');
+
+        $jumlahPemesananBerhasil = $user->lapangan->flatMap(function ($lap) {
+            return $lap->pemesanan->where('status', 'berhasil');
         });
 
-        $jumlahPemesananGagal = $lapangan->sum(function ($lap) {
-            return $lap->pemesanan->where('status', 'berhasil')->sum('total_harga');
-        });
+        $jumlahPemesananPending = $user->lapangan->flatMap(function ($lap) {
+            return $lap->pemesanan->where('status', 'pending');
+        })->count();
 
-        $totalSaldo = $jumlahPemesanan - $jumlahPenarikan;
+        $totalSaldo = $jumlahPemesananBerhasil->sum('total_harga') - $jumlahPenarikan;
 
         return view('penyedia_lapangan.dashboard', [
             'totalSaldo' => $totalSaldo,
-            'dataLapangan' => $lapangan,
-            'dataPenarikan' => $penarikan,
-            'pemesananGagal' => $jumlahPemesananGagal,
-            'pemesananBerhasil' => $jumlahPemesanan
+            'dataLapangan' => $user->lapangan,
+            'dataPenarikan' => $user->penarikan,
+            'pemesananPending' => $jumlahPemesananPending,
+            'pemesananBerhasil' => $jumlahPemesananBerhasil->count(),
         ]);
     }
 

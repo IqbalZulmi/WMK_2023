@@ -67,9 +67,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="100%">Tidak Ada Data Untuk Ditampilkan!</td>
-                                        </tr>
+                                        
                                     @endforelse
                                 </tbody>
                             </table>

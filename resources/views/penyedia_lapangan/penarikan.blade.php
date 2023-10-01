@@ -1,14 +1,32 @@
 @extends('html.html')
 
 @push('js')
-<script>
-    $(document).ready(function () {
-        $('.table').DataTable({
-            info: true,
-            dom: '<"row"<"col-sm-6 d-flex justify-content-center justify-content-sm-start mb-2 mb-sm-0"l><"col-sm-6 d-flex justify-content-center justify-content-sm-end"f>>rt<"row"<"col-sm-6 mt-0"i><"col-sm-6 mt-2"p>>',
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                info: true,
+                dom: '<"row"<"col-sm-6 d-flex justify-content-center justify-content-sm-start mb-2 mb-sm-0"l><"col-sm-6 d-flex justify-content-center justify-content-sm-end"f>>rt<"row"<"col-sm-6 mt-0"i><"col-sm-6 mt-2"p>>',
+            });
         });
-    });
-</script>
+    </script>
+
+    <script>
+        function formatInput(input) {
+            // Menghapus semua karakter selain angka
+            let value = input.value.replace(/\D/g, '');
+
+            // Menggunakan fungsi toLocaleString() untuk menampilkan format ribuan
+            input.value = parseInt(value).toLocaleString();
+        }
+
+        function formatValue(input) {
+            // Menghapus semua karakter selain angka
+            let value = input.value.replace(/\D/g, '');
+
+            // Menghilangkan format ribuan saat input kehilangan fokus
+            input.value = value;
+        }
+    </script>
 @endpush
 
 @section('content')
@@ -25,7 +43,7 @@
                     <li class="breadcrumb-item"><a href="{{ route('dashboardPage') }}">Home</a></li>
                     <li class="breadcrumb-item">Halaman</li>
                     <li class="breadcrumb-item active">Penarikan</li>
-                    </ol>
+                </ol>
             </nav>
         </div>
 
@@ -34,7 +52,7 @@
                 <div class="col-lg-12">
                     <div class="card overflow-auto">
                         <div class="card-body">
-                            <h5 class="card-title">Kelola Jenis Lapangan</h5>
+                            <h5 class="card-title">Pengajuan Penarikan</h5>
                             <div class="d-flex justify-content-end mb-2">
                                 <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#TambahModal">
                                     <i class="bi bi-plus-circle-fill"></i> Ajukan Penarikan
@@ -45,6 +63,7 @@
                                     <tr>
                                         <th scope="col">No</th>
                                         <th scope="col">Jumlah Penarikan</th>
+                                        <th scope="col">Tanggal Pengajuan</th>
                                         <th scope="col">Status</th>
                                     </tr>
                                 </thead>
@@ -52,15 +71,14 @@
                                     @forelse ($dataPending as $index => $data )
                                         <tr>
                                             <th>{{ $index+1 }}</th>
-                                            <td>{{ $data->jumlah_penarikan }}</td>
+                                            <td>Rp. {{ number_format($data->jumlah_penarikan, 0, ',', '.') }},00</td>
+                                            <td>{{ $data->created_at }}</td>
                                             <td>
                                                 <span class="btn btn-sm btn-warning disabled ">{{ $data->status }}</span>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="100%" class="text-center">Tidak Ada Data Untuk Ditampilkan!</td>
-                                        </tr>
+                                        
                                     @endforelse
                                 </tbody>
                             </table>
@@ -86,40 +104,48 @@
                                 @if(!Auth::user()->penyedia->rekening)
                                     <h4>Silahkan tambahkan rekening anda pada profile</h4>
                                 @else
-                                    <div class="col-12">
-                                        <label for="" class="mb-2">Total Saldo</label>
-                                        <input name="total_saldo" type="text" class="form-control @error('total_saldo') is-invalid @enderror" value="Rp. {{ number_format($totalSaldo, 0, ',', '.') }},00" disabled>
+                                <div class="col-12">
+                                    <label for="inputBusinessName" class="form-label">Jumlah Penarikan</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp.</span>
+                                        <input name="total_saldo" type="text" class="form-control @error('total_saldo') is-invalid @enderror" onkeyup="formatInput(this)" onblur="formatValue(this)" value="{{ old('total_saldo',$totalSaldo) }}" readonly>
                                         @error('total_saldo')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                        <span class="input-group-text">,00</span>
                                     </div>
+                                </div>
                                     <div class="col-12">
                                         <label for="" class="mb-2">Bank</label>
-                                        <input name="bank" type="text" class="form-control @error('bank') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->daftar_bank->nama_bank }}" disabled>
+                                        <input name="bank" type="text" class="form-control @error('bank') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->daftar_bank->nama_bank }}" readonly>
                                         @error('bank')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-6">
                                         <label for="" class="mb-2">Nomor Rekening</label>
-                                        <input name="no_rekening" type="text" class="form-control @error('no_rekening') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->no_rekening }}" disabled>
+                                        <input name="no_rekening" type="text" class="form-control @error('no_rekening') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->no_rekening }}" readonly>
                                         @error('no_rekening')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-6">
                                         <label for="" class="mb-2">Nama Rekening</label>
-                                        <input name="nama_rekening" type="text" class="form-control @error('nama_rekening') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->nama_rekening }}" disabled>
+                                        <input name="nama_rekening" type="text" class="form-control @error('nama_rekening') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->nama_rekening }}" readonly>
                                         @error('nama_rekening')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-12">
-                                        <label for="" class="mb-2">Jumlah Penarikan</label>
-                                        <input name="jumlah_penarikan" type="text" class="form-control @error('jumlah_penarikan') is-invalid @enderror" value="{{ old('jumlah_penarikan') }}" placeholder="Jumlah Penarikan yang diinginkan" required>
-                                        @error('jumlah_penarikan')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <label for="inputBusinessName" class="form-label">Jumlah Penarikan</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp.</span>
+                                            <input name="jumlah_penarikan" type="text" class="form-control @error('jumlah_penarikan') is-invalid @enderror" onkeyup="formatInput(this)" onblur="formatValue(this)" placeholder="Masukkan harga per jam" value="{{ old('jumlah_penarikan') }}">
+                                            @error('jumlah_penarikan')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <span class="input-group-text">,00</span>
+                                        </div>
                                     </div>
                                 @endif
                             </div>
@@ -127,7 +153,7 @@
                     </div>
                 <div class="modal-footer">
                         @if(!Auth::user()->penyedia->rekening)
-                            <a href="{{ route('profilePenyedia') }}" class="btn btn-main">TambahKan Rekening <i class="bi bi-arrow-right-circle"></i></a>
+                            <a href="{{ route('profilePenyedia') }}" class="btn btn-main">Tambahkan Rekening <i class="bi bi-arrow-right-circle"></i></a>
                         @else
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-main">Simpan</button>

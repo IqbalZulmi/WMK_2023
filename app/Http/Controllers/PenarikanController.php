@@ -20,40 +20,68 @@ class PenarikanController extends Controller
 
     public function showPenarikanPage(){
         $auth = Auth::user()->penyedia;
-        $penarikan = Penarikan::where('id_penyedia_lapangan', $auth->id)->get();
-        $lapangan = lapangan::where('id_penyedia_lapangan', $auth->id)->get();
 
-        $penarikanPending = $penarikan->where('status','pending');
+        $penarikan = penarikan::where('id_penyedia_lapangan',$auth->id)->latest()->get();
+        $lapangan = lapangan::where('id_penyedia_lapangan',$auth->id)->get();
 
-        $jumlahPenarikan = $penarikan->where('status','selesai')->sum('jumlah_penarikan');
-        $jumlahPemesanan = $lapangan->sum(function ($lap) {
-            return $lap->pemesanan->where('status', 'berhasil')->sum('total_harga');
+        $penarikanPending = $penarikan->where('status','sedang diproses');
+
+        $jumlahPenarikan = $penarikan->where('status', 'selesai')->sum('jumlah_penarikan');
+        $jumlahPemesanan = $lapangan->flatMap(function ($lap) {
+            return $lap->pemesanan->where('status', 'berhasil');
         });
 
-        $totalSaldo = $jumlahPemesanan - $jumlahPenarikan;
+        $totalSaldo = $jumlahPemesanan->sum('total_harga') - $jumlahPenarikan;
 
-        return view('penyedia_lapangan.penarikan',[
+        return view('penyedia_lapangan.penarikan', [
             'dataPending' => $penarikanPending,
             'totalSaldo' => $totalSaldo,
         ]);
     }
 
-    public function pengajuanPenarikan(){
-        
+    public function pengajuanPenarikan(Request $request){
+        $validatedData = $request->validate([
+            'total_saldo' => 'required',
+            'bank' => 'required',
+            'no_rekening' => 'required|numeric',
+            'nama_rekening' => 'required',
+            'jumlah_penarikan' => 'required|numeric|lte:total_saldo',
+        ], [
+            'total_saldo.required' => 'Total saldo harus diisi.',
+            'bank.required' => 'Bank harus diisi.',
+            'no_rekening.required' => 'Nomor rekening harus diisi.',
+            'no_rekening.numeric' => 'Nomor rekening harus berupa angka.',
+            'nama_rekening.required' => 'Nama rekening harus diisi.',
+            'jumlah_penarikan.required' => 'Jumlah penarikan harus diisi.',
+            'jumlah_penarikan.numeric' => 'Jumlah penarikan harus berupa angka.',
+            'jumlah_penarikan.lte' => 'Jumlah penarikan tidak boleh lebih besar dari total saldo.',
+        ]);
+
+        $penarikan = new penarikan();
+        $penarikan->id_penyedia_lapangan = Auth::user()->penyedia->id;
+        $penarikan->jumlah_penarikan = $request->jumlah_penarikan;
+
+        if ($penarikan->save()) {
+            return redirect()->back()->with([
+                'notifikasi'=>"Berhasil mengajukan penarikan saldo!",
+                "type"=>"success"
+            ]);
+        }else{
+            return redirect()->back()->with([
+                'notifikasi'=>"Gagal mengajukan penarikan saldo!",
+                "type"=>"error",
+            ]);
+        }
     }
 
-    // public function showValidasdasiPenarikan($id){
-    //     $penarikan = Penarikan::where('id_penyedia_lapangan',$id)->get();
-    //     $lapangan = lapangan::where('id_penyedia_lapangan',$id)->get();
+    public function showRiwayatPenarikanPage(){
+        $user = Auth::user()->penyedia;
 
-    //     $jumlahPenarikan = $penarikan->sum('jumlah_penarikan');
-    //     $jumlahpemesanan = $lapangan->pemesanan->sum('total_harga');
-
-    //     $totalSaldo = $jumlahpemesanan - $jumlahPenarikan;
-    //     // return view('admin.validasi-penarikan',[
-    //     //     'dataPenarikan' => $penarikan,
-    //     // ]);
-    // }
-
-
+        $penarikanSelesai = penarikan::where('id_penyedia_lapangan',$user->id)->where('status','selesai')->latest()->get();
+        $penarikanDitolak = penarikan::where('id_penyedia_lapangan',$user->id)->where('status','ditolak')->latest()->get();
+        return view('penyedia_lapangan.riwayat-penarikan',[
+            'dataSelesai' => $penarikanSelesai,
+            'dataDitolak' => $penarikanDitolak,
+        ]);
+    }
 }
