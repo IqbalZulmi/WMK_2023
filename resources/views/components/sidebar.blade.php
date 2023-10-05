@@ -51,7 +51,7 @@
                 </a>
                 <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="tables-general.html">
+                        <a href="{{ route('riwayatValidasiPenarikanPage') }}">
                             <i class="bi bi-cash-coin"></i><span>Penarikan</span>
                         </a>
                     </li>

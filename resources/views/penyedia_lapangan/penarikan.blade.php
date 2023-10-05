@@ -78,7 +78,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        
+
                                     @endforelse
                                 </tbody>
                             </table>
@@ -104,17 +104,17 @@
                                 @if(!Auth::user()->penyedia->rekening)
                                     <h4>Silahkan tambahkan rekening anda pada profile</h4>
                                 @else
-                                <div class="col-12">
-                                    <label for="inputBusinessName" class="form-label">Jumlah Penarikan</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp.</span>
-                                        <input name="total_saldo" type="text" class="form-control @error('total_saldo') is-invalid @enderror" onkeyup="formatInput(this)" onblur="formatValue(this)" value="{{ old('total_saldo',$totalSaldo) }}" readonly>
-                                        @error('total_saldo')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                        <span class="input-group-text">,00</span>
+                                    <div class="col-12">
+                                        <label for="inputBusinessName" class="form-label">Total Saldo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp.</span>
+                                            <input name="total_saldo" type="text" class="form-control @error('total_saldo') is-invalid @enderror" onkeyup="formatInput(this)" onblur="formatValue(this)" value="{{ old('total_saldo',$totalSaldo) }}" readonly>
+                                            @error('total_saldo')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <span class="input-group-text">,00</span>
+                                        </div>
                                     </div>
-                                </div>
                                     <div class="col-12">
                                         <label for="" class="mb-2">Bank</label>
                                         <input name="bank" type="text" class="form-control @error('bank') is-invalid @enderror" value="{{ Auth::user()->penyedia->rekening->daftar_bank->nama_bank }}" readonly>

@@ -65,9 +65,14 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">No</th>
-                                                    <th scope="col">Tanggal Pengajuan</th>
+                                                    <th scope="col">Tanggal Validasi</th>
+                                                    <th scope="col">Nama Bisnis</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">No HP</th>
+                                                    <th scope="col">Bank</th>
+                                                    <th scope="col">No Rekening</th>
+                                                    <th scope="col">Nama Rekening</th>
                                                     <th scope="col">Jumlah Penarikan</th>
-                                                    <th scope="col">Nama Admin</th>
                                                     <th scope="col">Bukti Pembayaran</th>
                                                     <th scope="col">Status</th>
                                                     <th scope="col">Komentar</th>
@@ -77,12 +82,17 @@
                                                 @forelse ($dataSelesai as $index => $data )
                                                     <tr>
                                                         <td>{{ $index+1 }}</td>
-                                                        <td>{{ $data->created_at }}</td>
+                                                        <td>{{ $data->updated_at }}</td>
+                                                        <td>{{ $data->penyedia->nama_bisnis }}</td>
+                                                        <td>{{ $data->penyedia->user->email }}</td>
+                                                        <td>{{ $data->penyedia->no_hp }}</td>
+                                                        <td>{{ $data->penyedia->rekening->daftar_bank->nama_bank }}</td>
+                                                        <td>{{ $data->penyedia->rekening->no_rekening }}</td>
+                                                        <td>{{ $data->penyedia->rekening->nama_rekening }}</td>
                                                         <td>Rp. {{ number_format($data->jumlah_penarikan, 0, ',', '.') }},00</td>
-                                                        <td>{{ $data->admin->nama }}</td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             <a href="{{ asset('storage/'. $data->bukti_pembayaran) }}" class="btn btn-main review">
-                                                                <i class="bi bi-eye"></i> Lihat Bukti
+                                                                <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lihat Bukti"></i>
                                                             </a>
                                                         </td>
                                                         <td>
@@ -107,9 +117,14 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">No</th>
-                                                    <th scope="col">Tanggal Pengajuan</th>
+                                                    <th scope="col">Tanggal Validasi</th>
+                                                    <th scope="col">Nama Bisnis</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">No HP</th>
+                                                    <th scope="col">Bank</th>
+                                                    <th scope="col">No Rekening</th>
+                                                    <th scope="col">Nama Rekening</th>
                                                     <th scope="col">Jumlah Penarikan</th>
-                                                    <th scope="col">Nama Admin</th>
                                                     <th scope="col">Status</th>
                                                     <th scope="col">Komentar</th>
                                                 </tr>
@@ -118,9 +133,14 @@
                                                 @forelse ($dataDitolak as $index => $data )
                                                     <tr>
                                                         <td>{{ $index+1 }}</td>
-                                                        <td>{{ $data->created_at }}</td>
+                                                        <td>{{ $data->updated_at }}</td>
+                                                        <td>{{ $data->penyedia->nama_bisnis }}</td>
+                                                        <td>{{ $data->penyedia->user->email }}</td>
+                                                        <td>{{ $data->penyedia->no_hp }}</td>
+                                                        <td>{{ $data->penyedia->rekening->daftar_bank->nama_bank }}</td>
+                                                        <td>{{ $data->penyedia->rekening->no_rekening }}</td>
+                                                        <td>{{ $data->penyedia->rekening->nama_rekening }}</td>
                                                         <td>Rp. {{ number_format($data->jumlah_penarikan, 0, ',', '.') }},00</td>
-                                                        <td>{{ $data->admin->nama }}</td>
                                                         <td>
                                                             <button class="btn btn-danger" disabled>
                                                                 {{ $data->status }}

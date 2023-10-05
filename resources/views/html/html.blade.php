@@ -72,21 +72,6 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script>
-        window.addEventListener('beforeunload', function (e) {
-            // Lakukan logout melalui AJAX atau fetch ke URL logout di sini
-            // Pastikan untuk mengirimkan permintaan logout ke sisi server (Laravel).
-            // Anda dapat menggunakan fetch atau jQuery AJAX untuk ini.
-            // Contohnya (menggunakan fetch):
-            fetch('/logout', {
-                method: 'GET', // Sesuaikan dengan metode logout Anda
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Token CSRF dari Laravel
-                },
-                credentials: 'same-origin', // Menggunakan kredensial yang sama
-            });
-        });
-    </script>
 
 
     @stack('js')
