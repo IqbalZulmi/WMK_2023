@@ -118,8 +118,17 @@ Route::middleware(CekRole::class . ':admin')->group(function(){
     Route::put('/validasi/penarikan/{id_penarikan}', ([PenarikanController::class,'validasiPenarikan']))
     ->name('validasiPenarikan');
 
+    Route::get('/validasi/pemesanan', ([PemesananController::class,'showValidasiPemesanan']))
+    ->name('validasiPemesananPage');
+
+    Route::put('/validasi/pemesanan/{id_pemesanan}/{id_pembayaran}', ([PemesananController::class,'validasiPemesanan']))
+    ->name('validasiPemesanan');
+
     Route::get('/riwayat/validasi/penarikan', ([PenarikanController::class,'showRiwayatValidasiPenarikanPage']))
     ->name('riwayatValidasiPenarikanPage');
+
+    Route::get('/riwayat/validasi/pemesanan', ([PemesananController::class,'showRiwayatValidasiPemesananPage']))
+    ->name('riwayatValidasiPemesananPage');
 });
 
 Route::middleware(CekRole::class . ':superadmin')->group(function(){

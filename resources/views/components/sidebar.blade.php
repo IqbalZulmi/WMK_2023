@@ -39,24 +39,24 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('jenisLapangan') ? '' : ' collapsed' }}" href="{{ route('jenisLapangan') }}">
+                <a class="nav-link {{ request()->routeIs('validasiPemesananPage') ? '' : ' collapsed' }}" href="{{ route('validasiPemesananPage') }}">
                     <i class="bi bi-cart3"></i>
                     <span>Pemesanan</span>
                 </a>
             </li>
             <li class="nav-heading">Riwayat</li>
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                <a class="nav-link {{ request()->routeIs('riwayatValidasiPenarikanPage') || request()->routeIs('riwayatValidasiPemesananPage') ? '' : ' collapsed' }}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-layout-text-window-reverse"></i><span>Riwayat Validasi</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <ul id="tables-nav" class="nav-content {{ request()->routeIs('riwayatValidasiPenarikanPage') || request()->routeIs('riwayatValidasiPemesananPage') ? '' : ' collapse' }}  " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="{{ route('riwayatValidasiPenarikanPage') }}">
                             <i class="bi bi-cash-coin"></i><span>Penarikan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="tables-data.html">
+                        <a href="{{ route('riwayatValidasiPemesananPage') }}">
                             <i class="bi bi-cart3"></i><span>Pemesanan</span>
                         </a>
                     </li>

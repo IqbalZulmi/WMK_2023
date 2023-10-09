@@ -33,14 +33,14 @@
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Riwayat Validasi Penarikan</h1>
+            <h1>Riwayat Validasi Pemesanan</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="{{ route('adminDashboardPage') }}">Home</a>
                     </li>
                     <li class="breadcrumb-item">Riwayat Validasi</li>
-                    <li class="breadcrumb-item active">Penarikan</li>
+                    <li class="breadcrumb-item active">Pemesanan</li>
                 </ol>
             </nav>
         </div>
@@ -65,31 +65,27 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">No</th>
-                                                    <th scope="col">Tanggal Validasi</th>
-                                                    <th scope="col">Nama Bisnis</th>
+                                                    <th scope="col">Nama</th>
                                                     <th scope="col">Email</th>
-                                                    <th scope="col">No HP</th>
-                                                    <th scope="col">Bank</th>
-                                                    <th scope="col">No Rekening</th>
-                                                    <th scope="col">Nama Rekening</th>
-                                                    <th scope="col">Jumlah Penarikan</th>
+                                                    <th scope="col">No Handphone</th>
+                                                    <th scope="col">Total Harga</th>
+                                                    <th scope="col">Tanggal Pembayaran</th>
                                                     <th scope="col">Bukti Pembayaran</th>
                                                     <th scope="col">Status</th>
                                                     <th scope="col">Komentar</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($dataSelesai as $index => $data )
+                                                @forelse ($dataBerhasil as $index => $data )
                                                     <tr>
-                                                        <td>{{ $index+1 }}</td>
-                                                        <td>{{ $data->updated_at }}</td>
-                                                        <td>{{ $data->penyedia->nama_bisnis }}</td>
-                                                        <td>{{ $data->penyedia->user->email }}</td>
-                                                        <td>{{ $data->penyedia->no_hp }}</td>
-                                                        <td>{{ $data->penyedia->rekening->daftar_bank->nama_bank }}</td>
-                                                        <td>{{ $data->penyedia->rekening->no_rekening }}</td>
-                                                        <td>{{ $data->penyedia->rekening->nama_rekening }}</td>
-                                                        <td>Rp. {{ number_format($data->jumlah_penarikan, 0, ',', '.') }},00</td>
+                                                        <th>{{ $index+1 }}</th>
+                                                        <td>{{ $data->pemesanan->pelanggan->nama }}</td>
+                                                        <td>{{ $data->pemesanan->pelanggan->user->email }}</td>
+                                                        <td>{{ $data->pemesanan->pelanggan->no_hp }}</td>
+                                                        <td>
+                                                            Rp. {{ number_format($data->pemesanan->total_harga, 0, ',', '.') }},00
+                                                        </td>
+                                                        <td>{{ $data->tanggal_pembayaran }}</td>
                                                         <td class="text-center">
                                                             <a href="{{ asset('storage/'. $data->bukti_pembayaran) }}" class="btn btn-main review">
                                                                 <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lihat Bukti"></i>
@@ -97,12 +93,10 @@
                                                         </td>
                                                         <td>
                                                             <button class="btn btn-success" disabled>
-                                                                {{ $data->status }}
+                                                                {{ $data->pemesanan->status }}
                                                             </button>
                                                         </td>
-                                                        <td>
-                                                            {{ $data->komentar ? $data->komentar : '-' }}
-                                                        </td>
+                                                        <td>{{ $data->pemesanan->komentar ?? '-' }}</td>
                                                     </tr>
                                                 @empty
 
@@ -117,38 +111,38 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">No</th>
-                                                    <th scope="col">Tanggal Validasi</th>
-                                                    <th scope="col">Nama Bisnis</th>
+                                                    <th scope="col">Nama</th>
                                                     <th scope="col">Email</th>
-                                                    <th scope="col">No HP</th>
-                                                    <th scope="col">Bank</th>
-                                                    <th scope="col">No Rekening</th>
-                                                    <th scope="col">Nama Rekening</th>
-                                                    <th scope="col">Jumlah Penarikan</th>
+                                                    <th scope="col">No Handphone</th>
+                                                    <th scope="col">Total Harga</th>
+                                                    <th scope="col">Tanggal Pembayaran</th>
+                                                    <th scope="col">Bukti Pembayaran</th>
                                                     <th scope="col">Status</th>
                                                     <th scope="col">Komentar</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($dataDitolak as $index => $data )
+                                                @forelse ($dataGagal as $index => $data )
                                                     <tr>
-                                                        <td>{{ $index+1 }}</td>
-                                                        <td>{{ $data->updated_at }}</td>
-                                                        <td>{{ $data->penyedia->nama_bisnis }}</td>
-                                                        <td>{{ $data->penyedia->user->email }}</td>
-                                                        <td>{{ $data->penyedia->no_hp }}</td>
-                                                        <td>{{ $data->penyedia->rekening->daftar_bank->nama_bank }}</td>
-                                                        <td>{{ $data->penyedia->rekening->no_rekening }}</td>
-                                                        <td>{{ $data->penyedia->rekening->nama_rekening }}</td>
-                                                        <td>Rp. {{ number_format($data->jumlah_penarikan, 0, ',', '.') }},00</td>
+                                                        <th>{{ $index+1 }}</th>
+                                                        <td>{{ $data->pemesanan->pelanggan->nama }}</td>
+                                                        <td>{{ $data->pemesanan->pelanggan->user->email }}</td>
+                                                        <td>{{ $data->pemesanan->pelanggan->no_hp }}</td>
+                                                        <td>
+                                                            Rp. {{ number_format($data->pemesanan->total_harga, 0, ',', '.') }},00
+                                                        </td>
+                                                        <td>{{ $data->tanggal_pembayaran }}</td>
+                                                        <td class="text-center">
+                                                            <a href="{{ asset('storage/'. $data->bukti_pembayaran) }}" class="btn btn-main review">
+                                                                <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lihat Bukti"></i>
+                                                            </a>
+                                                        </td>
                                                         <td>
                                                             <button class="btn btn-danger" disabled>
-                                                                {{ $data->status }}
+                                                                {{ $data->pemesanan->status }}
                                                             </button>
                                                         </td>
-                                                        <td>
-                                                            {{ $data->komentar ? $data->komentar : '-' }}
-                                                        </td>
+                                                        <td>{{ $data->pemesanan->komentar }}</td>
                                                     </tr>
                                                 @empty
 

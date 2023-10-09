@@ -77,7 +77,7 @@
             <h1>Validasi Penarikan</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('superadminDashboardPage') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('adminDashboardPage') }}">Home</a></li>
                     <li class="breadcrumb-item">Validasi</li>
                     <li class="breadcrumb-item active">Penarikan</li>
                     </ol>

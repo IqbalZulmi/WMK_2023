@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('tanggal_pemesanan');
             $table->bigInteger('total_harga');
             $table->text('komentar')->nullable();
-            $table->enum('status',['pending','berhasil','gagal'])->default('pending');
+            $table->enum('status',['draft','pending','berhasil','gagal'])->default('draft');
             $table->timestamps();
         });
     }

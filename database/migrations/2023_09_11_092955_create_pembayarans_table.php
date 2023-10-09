@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_pemesanan');
             $table->foreign('id_pemesanan')->references('id')->on('pemesanans')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('id_admin');
+            $table->unsignedBigInteger('id_admin')->nullable();
             $table->foreign('id_admin')->references('id')->on('admins')->onDelete('cascade')->onUpdate('cascade');
             $table->date('tanggal_pembayaran');
             $table->string('bukti_pembayaran');
