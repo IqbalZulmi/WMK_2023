@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function showLandingPage(){
+        return view("landingPage");
+    }
+
     public function updateKataSandi(Request $request, $id_user){
         $validatedData = $request->validate([
             'password_lama' => 'required',

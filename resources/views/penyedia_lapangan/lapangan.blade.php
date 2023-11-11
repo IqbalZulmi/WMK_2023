@@ -55,6 +55,8 @@
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     @if ($dataJadwal->status == 'tersedia')
                                                         <i class="bi bi-check-circle text-success me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tersedia"></i>
+                                                    @elseif ($dataJadwal->status == 'sedang dipesan')
+                                                        <i class="bi bi-info-circle text-info me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Sedang Dipesan"></i>
                                                     @elseif ($dataJadwal->status == 'telah dipesan')
                                                         <i class="bi bi-exclamation-circle text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Telah Dipesan"></i>
                                                     @else

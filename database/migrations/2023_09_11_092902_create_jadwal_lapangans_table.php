@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('jam_mulai');
             $table->time('jam_selesai');
             $table->bigInteger('harga');
-            $table->enum('status',['tersedia','telah dipesan','tidak tersedia'])->default('tersedia');
+            $table->enum('status',['sedang dipesan','tersedia','telah dipesan','tidak tersedia'])->default('tersedia');
             $table->timestamps();
         });
     }

@@ -37,7 +37,7 @@
                             <h5 class="card-title">Kelola Daftar Bank</h5>
                             <div class="d-flex justify-content-end mb-2">
                                 <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#TambahModal">
-                                    <i class="bi bi-plus-circle-fill"></i> Tambah Admin
+                                    <i class="bi bi-plus-circle-fill"></i> Tambah Bank
                                 </button>
                             </div>
                             <table class="table table-striped table-hover border table-bordered align-middle">
@@ -67,7 +67,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        
+
                                     @endforelse
                                 </tbody>
                             </table>

@@ -22,6 +22,13 @@
                     <span>Jenis Lapangan</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('metodePembayaran') ? '' : ' collapsed' }}" href="{{ route('metodePembayaran') }}">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Metode Pembayaran</span>
+                </a>
+            </li>
         @elseif (Auth::user()->role == 'admin')
             <li class="nav-heading">Validasi</li>
             <li class="nav-item">

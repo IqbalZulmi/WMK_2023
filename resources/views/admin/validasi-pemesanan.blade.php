@@ -86,41 +86,86 @@
                                         <th scope="col">Total Harga</th>
                                         <th scope="col">Tanggal Pembayaran</th>
                                         <th scope="col">Bukti Pembayaran</th>
+                                        <th scope="col">Metode Pembayaran</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($dataPembayaran as $index => $data )
-                                        <tr>
-                                            <th>{{ $index+1 }}</th>
-                                            <td>{{ $data->pemesanan->pelanggan->nama }}</td>
-                                            <td>{{ $data->pemesanan->pelanggan->user->email }}</td>
-                                            <td>{{ $data->pemesanan->pelanggan->no_hp }}</td>
-                                            <td>
-                                                Rp. {{ number_format($data->pemesanan->total_harga, 0, ',', '.') }},00
-                                            </td>
-                                            <td>{{ $data->tanggal_pembayaran }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ asset('storage/'. $data->bukti_pembayaran) }}" class="btn btn-main review">
-                                                    <i class="bi bi-eye" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lihat Bukti"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-warning" disabled>
-                                                    {{ $data->pemesanan->status }}
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex flex-wrap gap-1 justify-content-center">
-                                                    <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#validasiModal{{ $index+1 }}">
-                                                        <i class="bi bi-pen" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Validasi"></i>
+                                    @forelse ($dataPembayaran as $groupKey => $group)
+                                        @php
+                                            $groupCount = $group->count();
+                                            $sanitizedGroupKey = preg_replace('/\s+/', '_', $groupKey); // Mengganti spasi dengan underscore
+                                            $sanitizedGroupKey = preg_replace('/[^A-Za-z0-9_\-]/', '', $sanitizedGroupKey); // Mengganti semua karakter selain alphanumerik, underscore, dan dash
+                                        @endphp
+                                        @if ($groupCount > 1) {{-- If group has more than one item, display only the first one --}}
+                                            @php $data = $group->first(); @endphp
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $data->pelanggan->nama }}</td>
+                                                <td>{{ $data->pelanggan->user->email }}</td>
+                                                <td>{{ $data->pelanggan->no_hp }}</td>
+                                                <td>Rp. {{ number_format($data->total_harga, 0, ',', '.') }},00</td>
+                                                <td>{{ $data->pembayaran->tanggal_pembayaran }}</td>
+                                                <td class="text-center">
+                                                    @if($data->pembayaran->bukti_pembayaran)
+                                                        <a href="{{ asset('storage/'. $data->pembayaran->bukti_pembayaran) }}" class="btn btn-main review">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>{{ $data->metode_pembayaran->nama_metode }}</td>
+                                                <td>
+                                                    <button class="btn btn-warning" disabled>
+                                                        {{ $data->status }}
                                                     </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                                        <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#validasiModal{{ $sanitizedGroupKey  }}">
+                                                            <i class="bi bi-pen"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @else
+                                            @foreach($group as $data)
+                                                <tr>
+                                                    <td>{{ $loop->parent->iteration }}</td>
+                                                    <td>{{ $data->pelanggan->nama }}</td>
+                                                    <td>{{ $data->pelanggan->user->email }}</td>
+                                                    <td>{{ $data->pelanggan->no_hp }}</td>
+                                                    <td>Rp. {{ number_format($data->total_harga, 0, ',', '.') }},00</td>
+                                                    <td>{{ $data->pembayaran ? $data->pembayaran->tanggal_pembayaran : 'N/A' }}</td>
+                                                    <td class="text-center">
+                                                        @if($data->pembayaran && $data->pembayaran->bukti_pembayaran)
+                                                            <a href="{{ asset('storage/'. $data->pembayaran->bukti_pembayaran) }}" class="btn btn-main review">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+                                                        @else
+                                                            N/A
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $data->metode_pembayaran->nama_metode }}</td>
+                                                    <td>
+                                                        <button class="btn btn-warning" disabled>
+                                                            {{ $data->status }}
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                                            <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#validasiModal{{ $sanitizedGroupKey  }}">
+                                                                <i class="bi bi-pen"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     @empty
-
+                                        {{-- Handle empty collection --}}
                                     @endforelse
                                 </tbody>
                             </table>
@@ -131,8 +176,13 @@
         </section>
     </main>
 
-    @foreach ($dataPembayaran as $index => $data )
-        <div class="modal fade" id="validasiModal{{ $index+1 }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    @foreach ($dataPembayaran as $groupKey => $group )
+        @php
+            $dataPelanggan = $group->first();
+            $sanitizedGroupKey = preg_replace('/\s+/', '_', $groupKey); // Mengganti spasi dengan underscore
+            $sanitizedGroupKey = preg_replace('/[^A-Za-z0-9_\-]/', '', $sanitizedGroupKey); // Mengganti semua karakter selain alphanumerik, underscore, dan dash
+        @endphp
+        <div class="modal fade" id="validasiModal{{ $sanitizedGroupKey  }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -140,20 +190,25 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('validasiPemesanan',['id_pemesanan' => $data->pemesanan->id, 'id_pembayaran' => $data->id]) }}" method="POST">
+                        <form action="{{ route('validasiPemesanan') }}" method="POST">
                             @csrf @method('put')
                             <div class="container-fluid">
                                 <div class="row gy-2">
+                                    @foreach ($group as $data)
+                                        {{-- Sembunyikan input untuk menyimpan id_pemesanan --}}
+                                        <input type="hidden" name="id_pemesanans[]" value="{{ $data->id }}">
+                                        {{-- Tampilkan informasi lain yang relevan jika perlu --}}
+                                    @endforeach
                                     <div class="col-12">
                                         <label for="" class="form-label mb-2">Nama</label>
-                                        <input name="nama" type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama',$data->pemesanan->pelanggan->nama) }}" disabled>
+                                        <input name="nama" type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama',$dataPelanggan->pelanggan->nama) }}" disabled>
                                         @error('nama')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-12">
                                         <label for="" class="form-label mb-2">no_hp</label>
-                                        <input name="no_hp" type="text" class="form-control @error('no_hp') is-invalid @enderror" value="{{ $data->pemesanan->pelanggan->no_hp }}" disabled>
+                                        <input name="no_hp" type="text" class="form-control @error('no_hp') is-invalid @enderror" value="{{ $dataPelanggan->pelanggan->no_hp }}" disabled>
                                         @error('no_hp')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

@@ -15,6 +15,7 @@ class pemesanan extends Model
         'id_pelanggan',
         'id_lapangan',
         'id_jadwal_lapangan',
+        'id_metode_pembayaran',
         'tanggal_pemesanan',
         'total_harga',
         'komentar',
@@ -37,5 +38,8 @@ class pemesanan extends Model
         return $this->hasOne(pembayaran::class,'id_pemesanan');
     }
 
+    public function metode_pembayaran(){
+        return $this->belongsTo(metode_pembayaran::class,'id_metode_pembayaran');
+    }
 
 }

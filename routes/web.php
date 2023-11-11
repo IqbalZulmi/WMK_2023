@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
+use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\NotActiveAccountController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PenarikanController;
@@ -30,7 +31,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('guest')->group(function(){
-    Route::get('/', ([AuthController::class,'showLoginPage']))
+    Route::get('/', ([UserController::class,'showLandingPage']))
+    ->name('landingPage');
+
+    Route::get('/login', ([AuthController::class,'showLoginPage']))
     ->name('loginPage');
 
     Route::post('/proses-login', ([AuthController::class, 'loginProcess']))
@@ -53,6 +57,8 @@ Route::middleware('auth')->group(function(){
     Route::put('/user/{id_user}/change-password',([UserController::class,'updateKataSandi']))
     ->name('updateKataSandi');
 
+    Route::get('/tes', ([PemesananController::class,'tes']))
+    ->name('tes');
 });
 
 Route::middleware(['cekstatus', 'cekrole:penyedia'])->group(function () {
@@ -121,7 +127,7 @@ Route::middleware(CekRole::class . ':admin')->group(function(){
     Route::get('/validasi/pemesanan', ([PemesananController::class,'showValidasiPemesanan']))
     ->name('validasiPemesananPage');
 
-    Route::put('/validasi/pemesanan/{id_pemesanan}/{id_pembayaran}', ([PemesananController::class,'validasiPemesanan']))
+    Route::put('/validasi/pemesanan', ([PemesananController::class,'validasiPemesanan']))
     ->name('validasiPemesanan');
 
     Route::get('/riwayat/validasi/penarikan', ([PenarikanController::class,'showRiwayatValidasiPenarikanPage']))
@@ -171,4 +177,15 @@ Route::middleware(CekRole::class . ':superadmin')->group(function(){
     Route::delete('/jenis-lapangan/{id_jenis_lapangan}/hapus', ([JenisLapanganController::class,'hapusJenisLapangan']))
     ->name('hapusJenisLapangan');
 
+    Route::get('/metode-pembayaran', ([MetodePembayaranController::class,'showMetodePembayaran']))
+    ->name('metodePembayaran');
+
+    Route::post('/metode-pembayaran', ([MetodePembayaranController::class,'tambahMetodePembayaran']))
+    ->name('tambahMetodePembayaran');
+
+    Route::put('/metode-pembayaran/{id_metode_pembayaran}/edit', ([MetodePembayaranController::class,'editMetodePembayaran']))
+    ->name('editMetodePembayaran');
+
+    Route::delete('/metode-pembayaran/{id_metode_pembayaran}/hapus', ([MetodePembayaranController::class,'hapusMetodePembayaran']))
+    ->name('hapusMetodePembayaran');
 });

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('id_lapangan')->references('id')->on('lapangans')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('id_jadwal_lapangan');
             $table->foreign('id_jadwal_lapangan')->references('id')->on('jadwal_lapangans')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('id_metode_pembayaran');
+            $table->foreign('id_metode_pembayaran')->references('id')->on('metode_pembayarans')->onDelete('cascade')->onUpdate('cascade');
             $table->date('tanggal_pemesanan');
             $table->bigInteger('total_harga');
             $table->text('komentar')->nullable();

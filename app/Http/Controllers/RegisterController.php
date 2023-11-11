@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\pelanggan;
 use App\Models\penyedia_lapangan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -96,6 +98,68 @@ class RegisterController extends Controller
                 'notifikasi' => 'Gagal membuat akun penyedia lapangan',
                 'type' => 'error',
             ]);
+        }
+    }
+
+    public function registerPelanggan(Request $request){
+        $Validator = Validator::make($request->all(), [
+            'email' => 'required|unique:users,email|email:dns',
+            'password' => 'required|min:8',
+            'konf_password' => 'required|min:8|same:password',
+            'nama'=> 'required|',
+            'no_hp' => 'required|numeric',
+        ], [
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email sudah digunakan.',
+            'email.email' => 'Email tidak valid.',
+            'password.required' => 'Password harus diisi.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'konf_password.required' => 'Konfirmasi Password harus diisi.',
+            'konf_password.same' => 'Konfirmasi Password harus sama dengan Password.',
+            'nama.required' => 'Nama harus diisi.',
+            'no_hp.required' => 'Nomor HP harus diisi.',
+            'no_hp.numeric' => 'Nomor HP harus berupa angka.',
+        ]);
+
+        if ($Validator->fails()) {
+            return response()->json([
+                'notifikasi' => 'Gagal membuat akun Pelanggan',
+                'type' => 'error',
+                'errors' => $Validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $akun = new User();
+            $akun->email = $request->email;
+            $akun->password = Hash::make($request->konf_password);
+            $akun->role = 'pelanggan';
+            $akun->save();
+
+            $pelanggan = new pelanggan();
+            $pelanggan->id_user = $akun->id;
+            $pelanggan->nama = $request->nama;
+            $pelanggan->no_hp = $request->no_hp;
+
+            $pelanggan->save();
+
+            DB::commit();
+
+            return response()->json([
+                'notifikasi' => 'Berhasil membuat akun Pelanggan',
+                'type' => 'success',
+            ],201);
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return response()->json([
+                'notifikasi' => 'Gagal membuat akun Pelanggan',
+                'type' => 'danger',
+            ],500);
         }
     }
 }
