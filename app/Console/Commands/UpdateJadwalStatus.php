@@ -38,7 +38,10 @@ class UpdateJadwalStatus extends Command
             DB::table('pemesanans')
                 ->where('status', 'draft')
                 ->where('updated_at', '<=', now()->subMinutes(10))
-                ->update(['status' => 'gagal']);
+                ->update([
+                    'status' => 'gagal',
+                    'komentar' => 'Dibatalkan oleh sistem'
+                ]);
 
             // Update status jadwal lapangan
             DB::table('jadwal_lapangans')
