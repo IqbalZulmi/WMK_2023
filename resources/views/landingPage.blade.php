@@ -338,7 +338,7 @@
                 </div>
               </div>
               <div class="member-info">
-                <h4>A. Iqbal Zummi</h4>
+                <h4>A. Iqbal Zulmi</h4>
                 <span>Financial Department</span>
               </div>
             </div>
