@@ -85,7 +85,7 @@
           </div>
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-          <img src="landing_assets/img/hero-img.png" class="img-fluid animated" alt="">
+          <img src="{{ asset('landing_assets/img/hero-img.png') }}" class="img-fluid animated" alt="">
         </div>
       </div>
     </div>
@@ -134,7 +134,7 @@
 
         <div class="row">
           <div class="image col-xl-5 d-flex align-items-stretch justify-content-center justify-content-xl-start" data-aos="fade-right" data-aos-delay="150">
-            <img src="landing_assets/img/counts-img.svg" alt="" class="img-fluid">
+            <img src="{{ asset('landing_assets/img/counts-img.svg') }}" alt="" class="img-fluid">
           </div>
 
           <div class="col-xl-7 d-flex align-items-stretch pt-4 pt-xl-0" data-aos="fade-left" data-aos-delay="300">
@@ -275,7 +275,7 @@
           <div class="col-lg-2 col-md-6 d-flex align-items-stretch">
             <div class="member" data-aos="fade-up" data-aos-delay="100">
               <div class="member-img">
-                <img src="landing_assets/img/team/team-1.jpeg" class="img-fluid" alt="">
+                <img src="{{ asset('landing_assets/img/team/team-1.jpeg') }}" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://instagram.com/marsandrafadilla?igshid=ZXhrNWgzc252cG5u"><i class="bi bi-instagram"></i></a>
                   <a href=""><i class="bi bi-x-lg"></i></a>
@@ -293,7 +293,7 @@
           <div class="col-lg-2 col-md-6 d-flex align-items-stretch">
             <div class="member" data-aos="fade-up" data-aos-delay="200">
               <div class="member-img">
-                <img src="landing_assets/img/team/team-2.jpeg" class="img-fluid" alt="">
+                <img src="{{ asset('landing_assets/img/team/team-2.jpeg') }}" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://instagram.com/hadiannelvie?igshid=ZG5hbjQzbjRrcW1m"><i class="bi bi-instagram"></i></a>
                   <a href=""><i class="bi bi-x-lg"></i></a>
@@ -311,7 +311,7 @@
           <div class="col-lg-2 col-md-6 d-flex align-items-stretch">
             <div class="member" data-aos="fade-up" data-aos-delay="300">
               <div class="member-img">
-                <img src="landing_assets/img/team/team-3.jpeg" class="img-fluid" alt="">
+                <img src="{{ asset('landing_assets/img/team/team-3.jpeg') }}" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://instagram.com/raffi07h?igshid=azZ3b2d6dGxrenJt"><i class="bi bi-instagram"></i></a>
                   <a href=""><i class="bi bi-x-lg"></i></a>
@@ -329,7 +329,7 @@
           <div class="col-lg-2 col-md-6 d-flex align-items-stretch">
             <div class="member" data-aos="fade-up" data-aos-delay="400">
               <div class="member-img">
-                <img src="landing_assets/img/team/team-4.jpg" class="img-fluid" alt="">
+                <img src="{{ asset('landing_assets/img/team/team-4.jpg') }}" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://instagram.com/iqbal_zulmii?igshid=MXRhOXNuZHczaDFz"><i class="bi bi-instagram"></i></a>
                   <a href=""><i class="bi bi-x-lg"></i></a>
@@ -347,7 +347,7 @@
           <div class="col-lg-2 col-md-6 d-flex align-items-stretch">
             <div class="member" data-aos="fade-up" data-aos-delay="400">
               <div class="member-img">
-                <img src="landing_assets/img/team/team-5.jpg" class="img-fluid" alt="">
+                <img src="{{ asset('landing_assets/img/team/team-5.jpg') }}" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://instagram.com/rayyan.ksy?igshid=MW9iM3Z1c3YweTdjdg=="><i class="bi bi-instagram"></i></a>
                   <a href=""><i class="bi bi-x-lg"></i></a>
