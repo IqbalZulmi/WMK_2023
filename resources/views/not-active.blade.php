@@ -6,7 +6,7 @@
     <main id="main" class="main">
         <div class="container">
             <div class="row d-flex justify-content-center align-items-center">
-                <img src="{{ asset('assets/img/logo-hijau.png') }}" alt="" height="400">
+                <img src="{{ asset('assets/img/not-available.svg') }}" alt="" height="400">
                 <div class="text-center">
                     <h3>Akun Anda belum diaktifkan.</h3>
                     <p>Mohon tunggu hingga administrator mengaktifkan akun Anda.</p>
