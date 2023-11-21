@@ -7,6 +7,8 @@ use App\Models\penyedia_lapangan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class PenyediaLapanganController extends Controller
 {
@@ -49,46 +51,46 @@ class PenyediaLapanganController extends Controller
             'foto.file' => 'Foto harus berupa file gambar.',
         ]);
 
-        $user = User::where('id',$id_user)->firstOrFail();
-        $user->email = $request->email;
+        DB::beginTransaction();
+        try{
 
-        $penyedia = penyedia_lapangan::where('id_user',$id_user)->firstOrFail();
-        $penyedia->nama_bisnis = $request->nama_bisnis;
-        $penyedia->alamat = $request->alamat;
-        $penyedia->deskripsi_lapangan = $request->deskripsi_lapangan;
-        $penyedia->jam_buka = $request->jam_buka;
-        $penyedia->jam_tutup = $request->jam_tutup;
-        $penyedia->no_hp = $request->no_hp;
+            $user = User::where('id',$id_user)->firstOrFail();
+            $user->email = $request->email;
+            $user->save();
 
-        if ($request->hasFile('foto')) {
-            $old_foto = $penyedia->foto;
-            if (!empty($old_foto) && is_file('storage/'.$old_foto)) {
-                unlink('storage/'.$old_foto);
+            $penyedia = penyedia_lapangan::where('id_user',$id_user)->firstOrFail();
+            $penyedia->nama_bisnis = $request->nama_bisnis;
+            $penyedia->alamat = $request->alamat;
+            $penyedia->deskripsi_lapangan = $request->deskripsi_lapangan;
+            $penyedia->jam_buka = $request->jam_buka;
+            $penyedia->jam_tutup = $request->jam_tutup;
+            $penyedia->no_hp = $request->no_hp;
+
+            if ($request->hasFile('foto')) {
+                $old_foto = $penyedia->foto;
+                if (!empty($old_foto) && is_file('storage/'.$old_foto)) {
+                    unlink('storage/'.$old_foto);
+                }
+
+                $foto = $request->file('foto')->store('public/profile_img');
+                $foto = basename($foto);
+                $penyedia->foto = $foto ? 'profile_img/' . $foto : null;
+            }else{
+                $foto = $penyedia->foto;
             }
 
-            $foto = $request->file('foto')->store('public/profile_img');
-            $foto = basename($foto);
-            $penyedia->foto = $foto ? 'profile_img/' . $foto : null;
-        }else{
-            $foto = $penyedia->foto;
-        }
+            $penyedia->save();
 
-        if($penyedia->isDirty() || $user->isDirty()){
-            if($penyedia->save() || $user->save()){
-                return redirect()->back()->with([
-                    'notifikasi' => 'Berhasil mengubah profile',
-                    'type' => 'success'
-                ]);
-            } else {
-                return redirect()->back()->with([
-                    'notifikasi' => 'Gagal mengubah profile',
-                    'type' => 'error'
-                ]);
-            }
-        }else{
+            DB::commit();
             return redirect()->back()->with([
-                'notifikasi' => 'Tidak ada perubahan!',
-                'type' => 'info'
+                'notifikasi'=>'Berhasil Mengubah Profil',
+                'type' => 'success',
+            ]);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with([
+                'notifikasi'=>'Gagal Mengubah Profil',
+                'type' => 'error',
             ]);
         }
     }
